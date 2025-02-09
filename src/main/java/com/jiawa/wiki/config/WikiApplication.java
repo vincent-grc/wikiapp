@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
-@ComponentScan("com.jiawa.wiki")
+@ComponentScan("com.jiawa")
 @SpringBootApplication
 public class WikiApplication {
 
