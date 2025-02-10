@@ -1,6 +1,5 @@
 package com.jiawa.wiki.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 //Returns HTTP views.
@@ -17,12 +16,12 @@ public class TestController {
      */
     @GetMapping("/hello")
     public String hello() {
-        return "你好";
+        return "Hello World";
     }
 
     @PostMapping("/hello/post")
     public String helloPost(String name) {
-        return "hello post" + name;
+        return "Hello post! " + name;
     }
 
 }
