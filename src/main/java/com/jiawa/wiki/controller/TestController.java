@@ -1,5 +1,6 @@
 package com.jiawa.wiki.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 //Returns HTTP views.
@@ -8,6 +9,12 @@ import org.springframework.web.bind.annotation.*;
 //Returns data directly (e.g., JSON or XML), not views.
 @RestController
 public class TestController {
+    /*
+    If the test.hello is not declared,
+    it will use the value after the colon (DEFAULT)
+     */
+    @Value("${test.hello:DEFAULT}")
+    private String testHello;
 
     /*
     Request handles all kinds of requests.
@@ -16,7 +23,7 @@ public class TestController {
      */
     @GetMapping("/hello")
     public String hello() {
-        return "Hello World";
+        return testHello;
     }
 
     @PostMapping("/hello/post")
