@@ -9,3 +9,4 @@ Content-Type: application/x-www-form-urlencoded
 name = Vincent!
 
 ###
+GET http://localhost:8881/test/list

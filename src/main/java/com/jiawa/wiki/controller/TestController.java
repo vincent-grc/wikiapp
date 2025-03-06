@@ -1,7 +1,13 @@
 package com.jiawa.wiki.controller;
 
+import com.jiawa.wiki.domain.Test;
+import com.jiawa.wiki.mapper.TestMapper;
+import com.jiawa.wiki.service.TestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 //Returns HTTP views.
 //@Controller
@@ -15,6 +21,11 @@ public class TestController {
      */
     @Value("${test.hello:DEFAULT}")
     private String testHello;
+
+    @Autowired
+    private TestService testService;
+    @Autowired
+    private TestMapper testMapper;
 
     /*
     Request handles all kinds of requests.
@@ -31,4 +42,8 @@ public class TestController {
         return "Hello post! " + name;
     }
 
+    @GetMapping("/test/list")
+    public List<Test> testList() {
+        return testMapper.list();
+    }
 }
