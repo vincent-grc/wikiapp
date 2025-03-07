@@ -24,8 +24,6 @@ public class TestController {
 
     @Autowired
     private TestService testService;
-    @Autowired
-    private TestMapper testMapper;
 
     /*
     Request handles all kinds of requests.
@@ -44,6 +42,6 @@ public class TestController {
 
     @GetMapping("/test/list")
     public List<Test> testList() {
-        return testMapper.list();
+        return testService.list();
     }
 }

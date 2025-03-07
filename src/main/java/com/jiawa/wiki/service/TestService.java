@@ -16,7 +16,7 @@ public class TestService {
 //    @Autowired
     private TestMapper testMapper;
 
-    public List<Test> getTestList() {
+    public List<Test> list() {
         return testMapper.list();
     }
 }
