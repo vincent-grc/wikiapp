@@ -12,7 +12,7 @@ public class DemoService {
 
     //Both annotation are valid
     @Resource
-//    @Autowired
+    //@Autowired
     private DemoMapper demoMapper;
 
     public List<Demo> list() {
