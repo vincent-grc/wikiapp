@@ -45,35 +45,21 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
-        <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData">
-          <template #footer>
-            <div>
-              <b>ant design vue</b>
-              footer part
-            </div>
-          </template>
+        <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks">
           <template #renderItem="{ item }">
-            <a-list-item key="item.title">
+            <a-list-item key="item.name">
               <template #actions>
-          <span v-for="{ icon, text } in actions" :key="icon">
-            <component :is="icon" style="margin-right: 8px" />
-            {{ text }}
-          </span>
-              </template>
-              <template #extra>
-                <img
-                    width="272"
-                    alt="logo"
-                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                />
+                <span v-for="{ icon, text } in actions" :key="icon">
+                  <component :is="icon" style="margin-right: 8px" />
+                  {{ text }}
+                </span>
               </template>
               <a-list-item-meta :description="item.description">
                 <template #title>
-                  <a :href="item.href">{{ item.title }}</a>
+                  <a :href="item.href">{{ item.name }}</a>
                 </template>
-                <template #avatar><a-avatar :src="item.avatar" /></template>
+                <template #avatar><a-avatar :src="item.cover" /></template>
               </a-list-item-meta>
-              {{ item.content }}
             </a-list-item>
           </template>
         </a-list>
@@ -120,10 +106,20 @@ const ebooks = ref();  // Explicitly set an array type
 // Fetch data on component mount
 onMounted(() => {
   console.log("onMounted ");
-  axios.get("http://localhost:8080/ebook/list?name=Spring").then((response) => {
+  axios.get("http://localhost:8080/ebook/list").then((response) => {
     const data = response.data;
     ebooks.value = data.content;  // Ensure `ebooks.value` is assigned
     console.log(response);
   });
 });
 </script>
+
+<style scoped>
+.ant-avatar {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 8%;
+  margin: 5px 0;
+}
+</style>
