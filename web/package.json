@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve-dev": "vue-cli-service serve --dev",
+    "serve-prod": "vue-cli-service serve --prod",
+    "build-dev": "vue-cli-service build --dev",
+    "build-prod": "vue-cli-service build --prod",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -27,6 +29,6 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
-    "typescript": "^5.8.2"
+    "typescript": "^4.5.5"
   }
 }
