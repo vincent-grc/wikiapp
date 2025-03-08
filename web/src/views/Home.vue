@@ -106,7 +106,8 @@ const ebooks = ref();  // Explicitly set an array type
 // Fetch data on component mount
 onMounted(() => {
   console.log("onMounted ");
-  axios.get("http://localhost:8080/ebook/list").then((response) => {
+  console.log(process.env.VUE_APP_SERVER);
+  axios.get(process.env.VUE_APP_SERVER + "/ebook/list").then((response) => {
     const data = response.data;
     ebooks.value = data.content;  // Ensure `ebooks.value` is assigned
     console.log(response);
