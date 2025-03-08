@@ -1,21 +1,21 @@
 <template>
   <a-layout>
-    <theHeader></theHeader>
+    <the-header></the-header>
     <router-view/>
-    <a-layout-footer style="text-align: center">
-      Wiki Ebook ©2025 Created by Vincent Guo
-    </a-layout-footer>
+    <the-footer></the-footer>
   </a-layout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import theHeader from '@/components/TheHeader.vue';
+import theHeader from '@/components/the-header.vue';
+import theFooter from "@/components/the-footer.vue";
 
 export default defineComponent({
   name: 'app',
   components: {
     theHeader,
+    theFooter
   },
 });
 </script>

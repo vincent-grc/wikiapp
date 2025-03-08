@@ -18,9 +18,6 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'theHeader',
-  props: {
-    msg: String,
-  },
+  name: 'the-header',
 });
 </script>
