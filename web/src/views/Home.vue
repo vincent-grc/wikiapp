@@ -45,23 +45,36 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
-        Content
+        <pre>
+          {{ebooks}}
+        </pre>
       </a-layout-content>
     </a-layout>
   </a-layout-content>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref} from 'vue';
 import axios from "axios";
 
 export default defineComponent({
   name: 'Home',
   setup() {
     console.log("Set up");
-    axios.get("http://localhost:8080/ebook/list?name=Spring").then((response) => {
-      console.log(response);
+    const ebooks = ref();
+
+    onMounted(() => {
+      console.log("onMounted ");
+      axios.get("http://localhost:8080/ebook/list?name=Spring").then((response) => {
+        const data = response.data;
+        ebooks.value = data.content;
+        console.log(response);
+      });
     });
+
+    return {
+      ebooks
+    };
   }
 });
 </script>
