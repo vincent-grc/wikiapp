@@ -9,6 +9,37 @@ import axios from "axios";
 
 axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 
+/**
+ * axios interceptor
+ */
+axios.interceptors.request.use(function (config) {
+    console.log('Request parameters：', config);
+    // const token = store.state.user.token;
+    // if (Tool.isNotEmpty(token)) {
+    //     config.headers.token = token;
+    //     console.log("Request headers to add tokens:", token);
+    // }
+    return config;
+}, error => {
+    return Promise.reject(error);
+});
+axios.interceptors.response.use(function (response) {
+    console.log('Return result：', response);
+    return response;
+}, error => {
+    console.log('Return error：', error);
+    // const response = error.response;
+    // const status = response.status;
+    // if (status === 401) {
+    //     // If status code is 401, redirect to home
+    //     console.log("Not logged in, redirect to home");
+    //     store.commit("setUser", {});
+    //     message.error("Not logged in or log in time out");
+    //     router.push('/');
+    // }
+    return Promise.reject(error);
+});
+
 const app = createApp(App);
 app.use(store).use(router).use(Antd).mount('#app');
 

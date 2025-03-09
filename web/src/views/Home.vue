@@ -105,11 +105,9 @@ const ebooks = ref();  // Explicitly set an array type
 
 // Fetch data on component mount
 onMounted(() => {
-  console.log("onMounted ");
   axios.get("/ebook/list").then((response) => {
     const data = response.data;
     ebooks.value = data.content;  // Ensure `ebooks.value` is assigned
-    console.log(response);
   });
 });
 </script>
