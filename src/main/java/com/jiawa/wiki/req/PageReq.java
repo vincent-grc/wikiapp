@@ -1,16 +1,16 @@
 package com.jiawa.wiki.req;
 
 public class PageReq {
-    private int pages;
+    private int page;
 
     private int size;
 
-    public int getPages() {
-        return pages;
+    public int getPage() {
+        return page;
     }
 
-    public void setPages(int pages) {
-        this.pages = pages;
+    public void setPage(int pages) {
+        this.page = pages;
     }
 
     public int getSize() {
@@ -24,7 +24,7 @@ public class PageReq {
     @Override
     public String toString() {
         return "PageReq{" +
-                "pages=" + pages +
+                "page=" + page +
                 ", size=" + size +
                 '}';
     }
