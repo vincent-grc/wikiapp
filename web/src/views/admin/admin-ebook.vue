@@ -15,7 +15,7 @@
           </template>
           <template v-slot:action="{ text, record }">
             <a-space size="small">
-              <a-button type="primary">
+              <a-button type="primary" @click="edit(record)">
                 Edit
               </a-button>
               <a-button type="danger">
@@ -27,6 +27,25 @@
       </a-layout-content>
     </a-layout>
   </a-layout-content>
+  <a-modal v-model:open="modalVisible" title="Ebook form"
+           :confirm-loading="modalLoading"
+           @ok="modalHandleOk">
+
+    <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="封面">
+        <a-input v-model:value="ebook.cover" />
+      </a-form-item>
+      <a-form-item label="名称">
+        <a-input v-model:value="ebook.name" />
+      </a-form-item>
+      <a-form-item label="分类">
+        <a-input v-model:value="ebook.category1Id" />
+      </a-form-item>
+      <a-form-item label="描述">
+        <a-input v-model:value="ebook.description" type="textarea" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script lang="ts">
@@ -59,15 +78,15 @@ export default defineComponent({
         slots: { customRender: 'category' }
       },
       {
-        title: 'doc_count',
+        title: 'Number of Documents',
         dataIndex: 'docCount'
       },
       {
-        title: 'view_count',
+        title: 'Number of Views',
         dataIndex: 'viewCount'
       },
       {
-        title: 'vote_count',
+        title: 'Number of Likes',
         dataIndex: 'voteCount'
       },
       {
@@ -109,6 +128,27 @@ export default defineComponent({
       });
     };
 
+    /**
+     * --------Form----------
+     */
+    const ebook = ref({});
+    const modalVisible = ref(false);
+    const modalLoading = ref(false);
+    const modalHandleOk = () => {
+      modalLoading.value = true;
+      setTimeout(() => {
+        modalLoading.value = false;
+        modalVisible.value = false;
+      }, 2000)
+    };
+
+    // ---Edit---
+    const edit = (record: any) => {
+      modalVisible.value = true;
+      ebook.value = record;
+    };
+
+
     onMounted(() => {
       handleQuery({
         // These two parameters' name must match the ones in PageReq
@@ -123,6 +163,11 @@ export default defineComponent({
       columns,
       loading,
       handleTableChange,
+      edit,
+      ebook,
+      modalVisible,
+      modalLoading,
+      modalHandleOk
     }
   }
 });
