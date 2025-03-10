@@ -70,6 +70,13 @@
 			<version>1.2.83</version>
 		</dependency>
 
+		<!--  Pagehelper  -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
