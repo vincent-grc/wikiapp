@@ -8,6 +8,7 @@ import com.jiawa.wiki.domain.EbookExample;
 import com.jiawa.wiki.mapper.EbookMapper;
 import com.jiawa.wiki.req.EbookReq;
 import com.jiawa.wiki.resp.EbookResp;
+import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.utils.CopyUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
@@ -29,20 +30,24 @@ public class EbookService {
     //@Autowired
     private EbookMapper ebookMapper;
 
-    public List<EbookResp> list(EbookReq req) {
+    public PageResp<EbookResp> list(EbookReq req) {
         EbookExample example = new EbookExample();
         EbookExample.Criteria criteria = example.createCriteria();
 
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike("%" + req.getName() + "%");
         }
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(req.getPages(), req.getSize());
         List<Ebook> ebookList = ebookMapper.selectByExample(example);
 
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
         LOG.info("Total rows: {}", pageInfo.getTotal());
         LOG.info("Total pages: {}", pageInfo.getPages());
 
-        return CopyUtil.copyList(ebookList, EbookResp.class);
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(CopyUtil.copyList(ebookList, EbookResp.class));
+
+        return pageResp ;
     }
 }

@@ -4,6 +4,7 @@ import com.jiawa.wiki.domain.Ebook;
 import com.jiawa.wiki.req.EbookReq;
 import com.jiawa.wiki.resp.CommonResp;
 import com.jiawa.wiki.resp.EbookResp;
+import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.service.EbookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +23,8 @@ public class EbookController {
     public CommonResp ebookList(EbookReq req) {
         // In controller layer do not use the original ebook, instead we use EbookResp
         // to control the output to frontend
-        CommonResp<List<EbookResp>> resp = new CommonResp<>();
-        List<EbookResp> list  = ebookService.list(req);
+        CommonResp<PageResp<EbookResp>> resp = new CommonResp<>();
+        PageResp<EbookResp> list  = ebookService.list(req);
         resp.setContent(list);
         return resp;
     }
