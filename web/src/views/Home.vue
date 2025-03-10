@@ -74,19 +74,18 @@ import { onMounted, ref } from 'vue';
 import axios from "axios";
 
 // Define listData directly (automatically available in template)
-const listData: Record<string, string>[] = [];
-
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://joeschmoe.io/api/v1/random',
-    description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
+// const listData: Record<string, string>[] = [];
+// for (let i = 0; i < 23; i++) {
+//   listData.push({
+//     href: 'https://www.antdv.com/',
+//     title: `ant design vue part ${i}`,
+//     avatar: 'https://joeschmoe.io/api/v1/random',
+//     description:
+//         'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+//     content:
+//         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+//   });
+// }
 
 const pagination = {
   onChange: (page: number) => {
@@ -105,9 +104,14 @@ const ebooks = ref();  // Explicitly set an array type
 
 // Fetch data on component mount
 onMounted(() => {
-  axios.get("/ebook/list").then((response) => {
+  axios.get("/ebook/list", {
+    params: {
+      page: 1,
+      size: 1000
+    }
+  }).then((response) => {
     const data = response.data;
-    ebooks.value = data.content;  // Ensure `ebooks.value` is assigned
+    ebooks.value = data.content.list;  // Ensure `ebooks.value` is assigned
   });
 });
 </script>
