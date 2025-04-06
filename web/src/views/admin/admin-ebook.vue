@@ -32,16 +32,16 @@
            @ok="modalHandleOk">
 
     <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-      <a-form-item label="封面">
+      <a-form-item label="Cover">
         <a-input v-model:value="ebook.cover" />
       </a-form-item>
-      <a-form-item label="名称">
+      <a-form-item label="Name">
         <a-input v-model:value="ebook.name" />
       </a-form-item>
-      <a-form-item label="分类">
+      <a-form-item label="Category">
         <a-input v-model:value="ebook.category1Id" />
       </a-form-item>
-      <a-form-item label="描述">
+      <a-form-item label="Description">
         <a-input v-model:value="ebook.description" type="textarea" />
       </a-form-item>
     </a-form>
@@ -55,14 +55,13 @@ import axios from 'axios';
 export default defineComponent({
   name: 'AdminEbook',
   setup() {
-    const ebooks = ref();
-    const pagination = ref({
+     const pagination = ref({
       current: 1,
       pageSize: 4,
       total: 0
     });
     const loading = ref(false);
-
+    const ebooks = ref([]);
     const columns = [
       {
         title: 'cover',
@@ -75,7 +74,8 @@ export default defineComponent({
       },
       {
         title: 'category',
-        slots: { customRender: 'category' }
+        slots: { customRender: 'category' },
+        dataIndex: 'category1Id'
       },
       {
         title: 'Number of Documents',
@@ -136,10 +136,21 @@ export default defineComponent({
     const modalLoading = ref(false);
     const modalHandleOk = () => {
       modalLoading.value = true;
-      setTimeout(() => {
-        modalLoading.value = false;
-        modalVisible.value = false;
-      }, 2000)
+      axios.post("/ebook/save", ebook.value ).then((response) => {
+        const data = response.data; // data == commonResp
+
+        if (data.success) {
+          modalLoading.value = false;
+          modalVisible.value = false;
+
+          //load form again
+          handleQuery({
+            // These two parameters' name must match the ones in PageReq
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        }
+      });
     };
 
     // ---Edit---
