@@ -61,7 +61,9 @@ public class EbookService {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if (ObjectUtils.isEmpty(req.getId())) {
             // Add a new record
-            ebook.setId(snowFlake.nextId());
+
+            // Discard snowflake algorithm because frontend can not handle a large number
+            //ebook.setId(snowFlake.nextId());
             ebook.setViewCount(0);
             ebook.setVoteCount(0);
             ebook.setDocCount(0);
@@ -70,4 +72,9 @@ public class EbookService {
             ebookMapper.updateByPrimaryKey(ebook);
         }
     }
+
+    public void delete(Long id) {
+        ebookMapper.deleteByPrimaryKey(id);
+    }
+
 }

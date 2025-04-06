@@ -23,9 +23,16 @@
               <a-button type="primary" @click="edit(record)">
                 Edit
               </a-button>
-              <a-button type="danger">
-                Delete
-              </a-button>
+              <a-popconfirm
+                  title="Are you sure?"
+                  ok-text="Yes"
+                  cancel-text="No"
+                  @confirm="handleDelete(record.id)"
+              >
+                <a-button type="dashed">
+                  Delete
+                </a-button>
+              </a-popconfirm>
             </a-space>
           </template>
         </a-table>
@@ -170,6 +177,22 @@ export default defineComponent({
       ebook.value = {};
     };
 
+    const handleDelete = (id : number) => {
+      axios.delete("/ebook/delete/" + id).then((response) => {
+        console.log("Deleting ID:", id);
+        const data = response.data; // data == commonResp
+
+        if (data.success) {
+          //load form again
+          handleQuery({
+            // These two parameters' name must match the ones in PageReq
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        }
+      });
+    };
+
 
     onMounted(() => {
       handleQuery({
@@ -188,6 +211,7 @@ export default defineComponent({
 
       edit,
       add,
+      handleDelete,
 
       ebook,
       modalVisible,

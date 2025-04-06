@@ -36,3 +36,5 @@ insert into `ebook` (id, name, description) values (2, 'Vue Tutorial', 'Beginner
 insert into `ebook` (id, name, description) values (3, 'Python Tutorial', 'Beginner Friendly Python development，The preferred framework for enterprise application development');
 insert into `ebook` (id, name, description) values (4, 'Mysql Tutorial', 'Beginner Friendly Mysql development，The preferred framework for enterprise application development');
 insert into `ebook` (id, name, description) values (5, 'Oracle Tutorial', 'Beginner Friendly Oracle development，The preferred framework for enterprise application development');
+
+ALTER TABLE ebook MODIFY id BIGINT AUTO_INCREMENT;
