@@ -70,7 +70,7 @@ export default defineComponent({
   setup() {
      const pagination = ref({
       current: 1,
-      pageSize: 4,
+      pageSize: 10,
       total: 0
     });
     const loading = ref(false);
@@ -155,10 +155,10 @@ export default defineComponent({
     const modalHandleOk = () => {
       modalLoading.value = true;
       axios.post("/ebook/save", ebook.value ).then((response) => {
+        modalLoading.value = false;
         const data = response.data; // data == commonResp
 
         if (data.success) {
-          modalLoading.value = false;
           modalVisible.value = false;
 
           //load form again
@@ -167,7 +167,10 @@ export default defineComponent({
             page: pagination.value.current,
             size: pagination.value.pageSize
           });
+        } else {
+          message.error(data.message);
         }
+
       });
     };
 
