@@ -6,6 +6,7 @@ import com.jiawa.wiki.resp.CommonResp;
 import com.jiawa.wiki.resp.EbookQueryResp;
 import com.jiawa.wiki.resp.PageResp;
 import com.jiawa.wiki.service.EbookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp ebookList(EbookQueryReq req) {
+    public CommonResp ebookList(@Valid EbookQueryReq req) {
         // In controller layer do not use the original ebook, instead we use EbookResp
         // to control the output to frontend
         CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
