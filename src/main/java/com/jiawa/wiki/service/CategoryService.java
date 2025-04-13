@@ -33,8 +33,36 @@ public class CategoryService {
     @Autowired
     private SnowFlake snowFlake;
 
+    public List<CategoryQueryResp> all() {
+        CategoryExample example = new CategoryExample();
+        example.setOrderByClause("sort asc");
+        List<Category> categoryList = categoryMapper.selectByExample(example);
+
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
+
+        return list ;
+    }
+
+    /**
+     * Save the changes made from frontend
+     */
+    public void save(CategorySaveReq req) {
+        Category category = CopyUtil.copy(req, Category.class);
+        if (ObjectUtils.isEmpty(req.getId())) {
+            // Add a new record
+            categoryMapper.insert(category);
+        } else {
+            categoryMapper.updateByPrimaryKey(category);
+        }
+    }
+
+    public void delete(Long id) {
+        categoryMapper.deleteByPrimaryKey(id);
+    }
+
     public PageResp<CategoryQueryResp> list(CategoryQueryReq req) {
         CategoryExample example = new CategoryExample();
+        example.setOrderByClause("sort asc");
         CategoryExample.Criteria criteria = example.createCriteria();
         PageHelper.startPage(req.getPage(), req.getSize());
         List<Category> categoryList = categoryMapper.selectByExample(example);
@@ -49,28 +77,4 @@ public class CategoryService {
 
         return pageResp ;
     }
-
-    /**
-     * Save the changes made from frontend
-     */
-    public void save(CategorySaveReq req) {
-        Category category = CopyUtil.copy(req, Category.class);
-        if (ObjectUtils.isEmpty(req.getId())) {
-            // Add a new record
-
-            // Discard snowflake algorithm because frontend can not handle a large number
-            //category.setId(snowFlake.nextId());
-            //category.setViewCount(0);
-            //category.setVoteCount(0);
-            //category.setDocCount(0);
-            categoryMapper.insert(category);
-        } else {
-            categoryMapper.updateByPrimaryKey(category);
-        }
-    }
-
-    public void delete(Long id) {
-        categoryMapper.deleteByPrimaryKey(id);
-    }
-
 }
