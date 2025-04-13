@@ -67,3 +67,5 @@ insert into `category` (id, parent, name, sort) values (501, 500, 'Server', 501)
 insert into `category` (id, parent, name, sort) values (502, 500, 'Development Tools', 502);
 insert into `category` (id, parent, name, sort) values (503, 500, 'Popular Backend Languages', 503);
 
+ALTER TABLE category
+MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;

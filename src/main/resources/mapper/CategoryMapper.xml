@@ -98,7 +98,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jiawa.wiki.domain.Category">
+  <insert id="insert" parameterType="com.jiawa.wiki.domain.Category" useGeneratedKeys="true" keyProperty="id">
     insert into category (id, parent, `name`, 
       sort)
     values (#{id,jdbcType=BIGINT}, #{parent,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
