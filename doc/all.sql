@@ -38,3 +38,32 @@ insert into `ebook` (id, name, description) values (4, 'Mysql Tutorial', 'Beginn
 insert into `ebook` (id, name, description) values (5, 'Oracle Tutorial', 'Beginner Friendly Oracle development，The preferred framework for enterprise application development');
 
 ALTER TABLE ebook MODIFY id BIGINT AUTO_INCREMENT;
+
+drop table if exists `category`;
+
+# Classification
+drop table if exists `category`;
+create table `category` (
+                            `id` bigint not null comment 'id',
+                            `parent` bigint not null default 0 comment 'parent_id',
+                            `name` varchar(50) not null comment 'name',
+                            `sort` int comment 'order',
+                            primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='classification';
+
+insert into `category` (id, parent, name, sort) values (100, 000, 'Frontend Development', 100);
+insert into `category` (id, parent, name, sort) values (101, 100, 'Vue', 101);
+insert into `category` (id, parent, name, sort) values (102, 100, 'HTML & CSS', 102);
+insert into `category` (id, parent, name, sort) values (200, 000, 'Java', 200);
+insert into `category` (id, parent, name, sort) values (201, 200, 'Basic Applications', 201);
+insert into `category` (id, parent, name, sort) values (202, 200, 'Framework Applications', 202);
+insert into `category` (id, parent, name, sort) values (300, 000, 'Python', 300);
+insert into `category` (id, parent, name, sort) values (301, 300, 'Basic Applications', 301);
+insert into `category` (id, parent, name, sort) values (302, 300, 'Advanced Applications', 302);
+insert into `category` (id, parent, name, sort) values (400, 000, 'Database', 400);
+insert into `category` (id, parent, name, sort) values (401, 400, 'MySQL', 401);
+insert into `category` (id, parent, name, sort) values (500, 000, 'Others', 500);
+insert into `category` (id, parent, name, sort) values (501, 500, 'Server', 501);
+insert into `category` (id, parent, name, sort) values (502, 500, 'Development Tools', 502);
+insert into `category` (id, parent, name, sort) values (503, 500, 'Popular Backend Languages', 503);
+
