@@ -19,7 +19,7 @@
         <a-table
             :columns="columns"
             :row-key="record => record.id"
-            :data-source="categorys"
+            :data-source="level1"
             :loading="loading"
             :pagination="false"
         >
@@ -103,6 +103,19 @@ export default defineComponent({
     ];
 
     /**
+     * Level-one Tree，children are level-two
+     * [{
+     *   id: "",
+     *   name: "",
+     *   children: [{
+     *     id: "",
+     *     name: "",
+     *   }]
+     * }]
+     */
+    const level1 = ref();
+
+    /**
      * Data query
      **/
     const handleQuery = () => {
@@ -112,6 +125,10 @@ export default defineComponent({
         const data = response.data;
         if (data.success) {
           categorys.value = data.content;
+          console.log("Original data:", categorys.value);
+          level1.value = [];
+          level1.value = Tool.array2Tree(categorys.value, 0);
+          console.log("Tree-Structured data:", level1);
         } else {
           message.error(data.message);
         }
@@ -174,7 +191,8 @@ export default defineComponent({
 
     return {
       param,
-      categorys,
+      // categorys,
+      level1,
       columns,
       loading,
       handleQuery,
