@@ -21,7 +21,10 @@
         </a-menu>
       </a-layout-sider>
       <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
-        <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks">
+        <div class="welcome" v-show="isShowWelcome">
+          <h1>Welcome</h1>
+        </div>
+        <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks">
           <template #renderItem="{ item }">
             <a-list-item key="item.name">
               <template #actions>
@@ -106,8 +109,10 @@ export default defineComponent({
       });
     };
 
-    const handleClick = () => {
-      console.log("clicked");
+    const isShowWelcome = ref(true);
+
+    const handleClick = (value : any) => {
+      isShowWelcome.value = value.key == "welcome";
     };
 
     onMounted(() => {
@@ -136,6 +141,7 @@ export default defineComponent({
       handleClick,
       level1,
 
+      isShowWelcome,
     }
   }
 });
