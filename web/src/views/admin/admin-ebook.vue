@@ -139,6 +139,8 @@ export default defineComponent({
      **/
     const handleQuery = (p: any) => {
       loading.value = true;
+      // Empty the current value or after the edition we still see the old data
+      // ebooks.value = [];
       axios.get("/ebook/list", {
         params: {
           page: p.page,
@@ -235,9 +237,7 @@ export default defineComponent({
     const level1 = ref();
     let categorys: any;
     const handleQueryCategory = () => {
-      loading.value = true;
       axios.get("/category/all").then((response) => {
-        loading.value = false;
         const data = response.data;
         if (data.success) {
           categorys = data.content;
@@ -245,6 +245,13 @@ export default defineComponent({
           level1.value = [];
           level1.value = Tool.array2Tree(categorys, 0);
           console.log("Tree-Structured data:", level1);
+
+          // Load the ebooks, after loading the categories, or may have render problem
+          handleQuery({
+            // These two parameters' name must match the ones in PageReq
+            page: 1,
+            size: pagination.value.pageSize
+          });
         } else {
           message.error(data.message);
         }
@@ -265,11 +272,6 @@ export default defineComponent({
 
     onMounted(() => {
       handleQueryCategory();
-      handleQuery({
-        // These two parameters' name must match the ones in PageReq
-        page: 1,
-        size: pagination.value.pageSize
-      });
     });
 
     return {
