@@ -55,18 +55,17 @@
       <a-form-item label="Name">
         <a-input v-model:value="doc.name" />
       </a-form-item>
-      <a-form-item label="Parent">
-        <a-select
+      <a-form-item label="Parent Doc">
+        <a-tree-select
             v-model:value="doc.parent"
-            ref="select"
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="treeSelectData"
+            placeholder="Select a parent document"
+            tree-default-expand-all
+            :fieldNames="{label: 'name', value: 'id'}"
         >
-          <a-select-option :value="0">
-            New Doc
-          </a-select-option>
-          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="doc.id === c.id">
-            {{c.name}}
-          </a-select-option>
-        </a-select>
+        </a-tree-select>
       </a-form-item>
       <a-form-item label="Order">
         <a-input v-model:value="doc.sort " type="textarea" />
@@ -82,11 +81,13 @@ import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { message } from "ant-design-vue";
 import {Tool} from "@/utils/tool";
+import {useRoute} from "vue-router";
 
 
 export default defineComponent({
   name: 'AdminDoc',
   setup() {
+    const route = useRoute();
     const param = ref();
     param.value = {};
     const loading = ref(false);
@@ -149,6 +150,18 @@ export default defineComponent({
     /**
      * --------Form----------
      */
+    const treeSelectData = ref();
+    // treeSelectData.value = [];
+    treeSelectData.value = [
+      {
+        id: 1,
+        name: 'Doc A',
+        children: [
+          { id: 2, name: 'Doc A.1' },
+          { id: 3, name: 'Doc A.2' }
+        ]
+      }
+    ];
     const doc = ref({});
     const modalVisible = ref(false);
     const modalLoading = ref(false);
@@ -170,16 +183,60 @@ export default defineComponent({
       });
     };
 
+    /**
+     * Set a node and its children to disabled
+     */
+    const setDisable = (treeSelectData: any, id: any) => {
+      // console.log(treeSelectData, id);
+      // 遍历数组，即遍历某一层节点
+      for (let i = 0; i < treeSelectData.length; i++) {
+        const node = treeSelectData[i];
+        if (node.id === id) {
+          // 如果当前节点就是目标节点
+          console.log("disabled", node);
+          // 将目标节点设置为disabled
+          node.disabled = true;
+
+          // 遍历所有子节点，将所有子节点全部都加上disabled
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            for (let j = 0; j < children.length; j++) {
+              setDisable(children, children[j].id)
+            }
+          }
+        } else {
+          // 如果当前节点不是目标节点，则到其子节点再找找看。
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            setDisable(children, id);
+          }
+        }
+      }
+    };
+
     // ---Edit---
     const edit = (record: any) => {
       modalVisible.value = true;
       doc.value = Tool.copy(record);
+
+      // Prevent selecting the current node or its descendants as parent (would break the tree)
+      treeSelectData.value = Tool.copy(level1.value);           // Make a deep copy of the tree
+      setDisable(treeSelectData.value, record.id);              // Disable current node & its descendants
+
+      // Add a "None" option at the top
+      treeSelectData.value.unshift({id: 0, name: 'None'});
     };
 
     // ---Add---
     const add = () => {
       modalVisible.value = true;
-      doc.value = {};
+      doc.value = {
+        ebookId: route.query.ebookId
+      };
+
+      treeSelectData.value = Tool.copy(level1.value);
+
+      treeSelectData.value.unshift({id: 0, name: 'None'});
     };
 
     const handleDelete = (id : number) => {
@@ -201,7 +258,6 @@ export default defineComponent({
 
     return {
       param,
-      // docs,
       level1,
       columns,
       loading,
@@ -214,7 +270,9 @@ export default defineComponent({
       doc,
       modalVisible,
       modalLoading,
-      modalHandleOk
+      modalHandleOk,
+
+      treeSelectData,
     }
   }
 });
