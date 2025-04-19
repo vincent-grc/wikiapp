@@ -44,6 +44,24 @@ public class DocService {
         return list ;
     }
 
+    public PageResp<DocQueryResp> list(DocQueryReq req) {
+        DocExample example = new DocExample();
+        example.setOrderByClause("sort asc");
+        DocExample.Criteria criteria = example.createCriteria();
+        PageHelper.startPage(req.getPage(), req.getSize());
+        List<Doc> docList = docMapper.selectByExample(example);
+
+        PageInfo<Doc> pageInfo = new PageInfo<>(docList);
+        LOG.info("Total rows: {}", pageInfo.getTotal());
+        LOG.info("Total pages: {}", pageInfo.getPages());
+
+        PageResp<DocQueryResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(CopyUtil.copyList(docList, DocQueryResp.class));
+
+        return pageResp ;
+    }
+
     /**
      * Save the changes made from frontend
      */
@@ -61,21 +79,10 @@ public class DocService {
         docMapper.deleteByPrimaryKey(id);
     }
 
-    public PageResp<DocQueryResp> list(DocQueryReq req) {
+    public void delete(List<String> ids) {
         DocExample example = new DocExample();
-        example.setOrderByClause("sort asc");
         DocExample.Criteria criteria = example.createCriteria();
-        PageHelper.startPage(req.getPage(), req.getSize());
-        List<Doc> docList = docMapper.selectByExample(example);
-
-        PageInfo<Doc> pageInfo = new PageInfo<>(docList);
-        LOG.info("Total rows: {}", pageInfo.getTotal());
-        LOG.info("Total pages: {}", pageInfo.getPages());
-
-        PageResp<DocQueryResp> pageResp = new PageResp<>();
-        pageResp.setTotal(pageInfo.getTotal());
-        pageResp.setList(CopyUtil.copyList(docList, DocQueryResp.class));
-
-        return pageResp ;
+        criteria.andIdIn(ids);
+        docMapper.deleteByExample(example);
     }
 }

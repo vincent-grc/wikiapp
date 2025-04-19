@@ -187,17 +187,15 @@ export default defineComponent({
      * Set a node and its children to disabled
      */
     const setDisable = (treeSelectData: any, id: any) => {
-      // console.log(treeSelectData, id);
-      // 遍历数组，即遍历某一层节点
+      // Traverse all the nodes at a certain level
       for (let i = 0; i < treeSelectData.length; i++) {
         const node = treeSelectData[i];
         if (node.id === id) {
-          // 如果当前节点就是目标节点
-          console.log("disabled", node);
-          // 将目标节点设置为disabled
+          // Current node is the target
+          // Set the target node to disabled
           node.disabled = true;
 
-          // 遍历所有子节点，将所有子节点全部都加上disabled
+          // Traverse all children nodes, disable them all
           const children = node.children;
           if (Tool.isNotEmpty(children)) {
             for (let j = 0; j < children.length; j++) {
@@ -205,10 +203,39 @@ export default defineComponent({
             }
           }
         } else {
-          // 如果当前节点不是目标节点，则到其子节点再找找看。
+          // If the current node is not our target, look into its children
           const children = node.children;
           if (Tool.isNotEmpty(children)) {
             setDisable(children, id);
+          }
+        }
+      }
+    };
+
+    /**
+     * Get all the target node and its children nodes for the deletion
+     */
+    const ids: Array<string> = [];
+    const getDeleteIds = (treeSelectData: any, id: any) => {
+      // Traverse all the nodes at a certain level
+      for (let i = 0; i < treeSelectData.length; i++) {
+        const node = treeSelectData[i];
+        if (node.id === id) {
+          // Current node is the target
+          ids.push(id);
+
+          // Traverse all children nodes, delete them all
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            for (let j = 0; j < children.length; j++) {
+              getDeleteIds(children, children[j].id)
+            }
+          }
+        } else {
+          // If the current node is not our target, look into its children
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            getDeleteIds(children, id);
           }
         }
       }
@@ -240,8 +267,8 @@ export default defineComponent({
     };
 
     const handleDelete = (id : number) => {
-      axios.delete("/doc/delete/" + id).then((response) => {
-        console.log("Deleting ID:", id);
+      getDeleteIds(level1.value, id);
+      axios.delete("/doc/delete/" + ids.join(",")).then((response) => {
         const data = response.data; // data == commonResp
 
         if (data.success) {
