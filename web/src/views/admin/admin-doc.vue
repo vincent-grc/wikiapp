@@ -70,6 +70,9 @@
       <a-form-item label="Order">
         <a-input v-model:value="doc.sort " type="textarea" />
       </a-form-item>
+      <a-form-item label="Content">
+        <div id="content"></div>
+      </a-form-item>
     </a-form>
   </a-modal>
 </template>
@@ -82,7 +85,7 @@ import axios from 'axios';
 import { message } from "ant-design-vue";
 import {Tool} from "@/utils/tool";
 import {useRoute} from "vue-router";
-
+import E from 'wangeditor';
 
 export default defineComponent({
   name: 'AdminDoc',
@@ -151,20 +154,12 @@ export default defineComponent({
      * --------Form----------
      */
     const treeSelectData = ref();
-    // treeSelectData.value = [];
-    treeSelectData.value = [
-      {
-        id: 1,
-        name: 'Doc A',
-        children: [
-          { id: 2, name: 'Doc A.1' },
-          { id: 3, name: 'Doc A.2' }
-        ]
-      }
-    ];
+    treeSelectData.value = [];
     const doc = ref({});
     const modalVisible = ref(false);
     const modalLoading = ref(false);
+    let editor: any;
+
     const modalHandleOk = () => {
       modalLoading.value = true;
       axios.post("/doc/save", doc.value ).then((response) => {
@@ -252,6 +247,14 @@ export default defineComponent({
 
       // Add a "None" option at the top
       treeSelectData.value.unshift({id: 0, name: 'None'});
+
+      setTimeout(function () {
+        if (editor) {
+          editor.destroy();
+        }
+        editor = new E('#content');
+        editor.create();
+      }, 100);
     };
 
     // ---Add---
@@ -264,6 +267,14 @@ export default defineComponent({
       treeSelectData.value = Tool.copy(level1.value);
 
       treeSelectData.value.unshift({id: 0, name: 'None'});
+
+      setTimeout(function () {
+        if (editor) {
+          editor.destroy();
+        }
+        editor = new E('#content');
+        editor.create();
+      }, 100);
     };
 
     const handleDelete = (id : number) => {
