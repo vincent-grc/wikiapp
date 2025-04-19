@@ -1,0 +1,54 @@
+package com.jiawa.wiki.controller;
+
+import com.jiawa.wiki.req.DocQueryReq;
+import com.jiawa.wiki.req.DocSaveReq;
+import com.jiawa.wiki.resp.DocQueryResp;
+import com.jiawa.wiki.resp.CommonResp;
+import com.jiawa.wiki.resp.PageResp;
+import com.jiawa.wiki.service.DocService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/doc")
+public class DocController {
+    @Autowired
+    private DocService docService;
+
+    @GetMapping("/all")
+    public CommonResp all() {
+        // In controller layer do not use the original doc, instead we use DocResp
+        // to control the output to frontend
+        CommonResp<List<DocQueryResp>> resp = new CommonResp<>();
+        List<DocQueryResp> list  = docService.all();
+        resp.setContent(list);
+        return resp;
+    }
+
+    @GetMapping("/list")
+    public CommonResp docList(@Valid DocQueryReq req) {
+        // In controller layer do not use the original doc, instead we use DocResp
+        // to control the output to frontend
+        CommonResp<PageResp<DocQueryResp>> resp = new CommonResp<>();
+        PageResp<DocQueryResp> list  = docService.list(req);
+        resp.setContent(list);
+        return resp;
+    }
+
+    @PostMapping("/save")
+    public CommonResp saveDocList(@Valid @RequestBody DocSaveReq req) {
+        CommonResp resp = new CommonResp<>();
+        docService.save(req);
+        return resp;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public CommonResp deleteDocList(@PathVariable Long id) {
+        CommonResp resp = new CommonResp<>();
+        docService.delete(id);
+        return resp;
+    }
+}
