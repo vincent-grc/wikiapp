@@ -19,12 +19,14 @@
               </a-form>
             </p>
             <a-table
+                v-if="level1.length > 0"
                 :columns="columns"
                 :row-key="record => record.id"
                 :data-source="level1"
                 :loading="loading"
                 :pagination="false"
                 size="small"
+                :defaultExpandAllRows="true"
             >
               <template #name="{ text, record }">
                 {{record.sort}}, {{text}}
@@ -136,6 +138,7 @@ export default defineComponent({
      * }]
      */
     const level1 = ref();
+    level1.value = [];
 
     /**
      * Data query
