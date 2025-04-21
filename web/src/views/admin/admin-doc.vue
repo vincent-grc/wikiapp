@@ -180,8 +180,7 @@ export default defineComponent({
         const data = response.data; // data == commonResp
 
         if (data.success) {
-          modalVisible.value = false;
-
+          message.success("Saved Successfully")
           //load form again
           handleQuery();
         } else {
@@ -266,6 +265,7 @@ export default defineComponent({
 
     // ---Edit---
     const edit = (record: any) => {
+      editor.txt.html("");
       modalVisible.value = true;
       doc.value = Tool.copy(record);
       handleQueryContent();
@@ -280,6 +280,7 @@ export default defineComponent({
 
     // ---Add---
     const add = () => {
+      editor.txt.html("");
       modalVisible.value = true;
       doc.value = {
         ebookId: route.query.ebookId
