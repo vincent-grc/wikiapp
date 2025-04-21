@@ -19,12 +19,10 @@ public class DocController {
     @Autowired
     private DocService docService;
 
-    @GetMapping("/all")
-    public CommonResp all() {
-        // In controller layer do not use the original doc, instead we use DocResp
-        // to control the output to frontend
+    @GetMapping("/all/{ebookId}")
+    public CommonResp all(@PathVariable Long ebookId) {
         CommonResp<List<DocQueryResp>> resp = new CommonResp<>();
-        List<DocQueryResp> list  = docService.all();
+        List<DocQueryResp> list  = docService.all(ebookId);
         resp.setContent(list);
         return resp;
     }

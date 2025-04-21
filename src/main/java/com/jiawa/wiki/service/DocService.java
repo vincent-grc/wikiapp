@@ -39,8 +39,9 @@ public class DocService {
     @Autowired
     private ContentMapper contentMapper;
 
-    public List<DocQueryResp> all() {
+    public List<DocQueryResp> all(Long ebookId) {
         DocExample example = new DocExample();
+        example.createCriteria().andEbookIdEqualTo(ebookId);
         example.setOrderByClause("sort asc");
         List<Doc> docList = docMapper.selectByExample(example);
 
@@ -72,12 +73,16 @@ public class DocService {
      */
     public void save(@Valid DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);
+        Content content = CopyUtil.copy(req, Content.class);
         if (ObjectUtils.isEmpty(req.getId())) {
             // Add a new record
             docMapper.insert(doc);
-            contentMapper.insert(CopyUtil.copy(req, Content.class));
+
+            content.setId(doc.getId()); // IMPORTANT: set the ID
+            contentMapper.insert(content);
         } else {
             docMapper.updateByPrimaryKey(doc);
+            content.setId(doc.getId());
             int count = contentMapper.updateByPrimaryKeyWithBLOBs(CopyUtil.copy(req, Content.class));
             if (count == 0) {
                 contentMapper.insert(CopyUtil.copy(req, Content.class));
@@ -98,8 +103,8 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
-        if (content == null) {
-            return null;
+        if (ObjectUtils.isEmpty(content)) {
+            return "";
         }
         return content.getContent();
     }
