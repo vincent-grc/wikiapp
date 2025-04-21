@@ -2,8 +2,10 @@ package com.jiawa.wiki.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jiawa.wiki.domain.Content;
 import com.jiawa.wiki.domain.Doc;
 import com.jiawa.wiki.domain.DocExample;
+import com.jiawa.wiki.mapper.ContentMapper;
 import com.jiawa.wiki.mapper.DocMapper;
 import com.jiawa.wiki.req.DocQueryReq;
 import com.jiawa.wiki.req.DocSaveReq;
@@ -31,8 +33,11 @@ public class DocService {
     //@Autowired
     private DocMapper docMapper;
 
+    //@Autowired
+    //private SnowFlake snowFlake;
+
     @Autowired
-    private SnowFlake snowFlake;
+    private ContentMapper contentMapper;
 
     public List<DocQueryResp> all() {
         DocExample example = new DocExample();
@@ -70,8 +75,13 @@ public class DocService {
         if (ObjectUtils.isEmpty(req.getId())) {
             // Add a new record
             docMapper.insert(doc);
+            contentMapper.insert(CopyUtil.copy(req, Content.class));
         } else {
             docMapper.updateByPrimaryKey(doc);
+            int count = contentMapper.updateByPrimaryKeyWithBLOBs(CopyUtil.copy(req, Content.class));
+            if (count == 0) {
+                contentMapper.insert(CopyUtil.copy(req, Content.class));
+            }
         }
     }
 

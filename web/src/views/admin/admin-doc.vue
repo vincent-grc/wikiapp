@@ -166,12 +166,15 @@ export default defineComponent({
      */
     const treeSelectData = ref();
     treeSelectData.value = [];
-    const doc = ref({});
+    const doc = ref();
+    doc.value = {};
     const modalVisible = ref(false);
     const modalLoading = ref(false);
+    let editor : any;
 
     const handleSave = () => {
       modalLoading.value = true;
+      doc.value.content = editor.txt.html();
       axios.post("/doc/save", doc.value ).then((response) => {
         modalLoading.value = false;
         const data = response.data; // data == commonResp
@@ -287,7 +290,7 @@ export default defineComponent({
     onMounted(() => {
       handleQuery( );
       nextTick(() => {
-        const editor = new E('#content');
+        editor = new E('#content');
         editor.config.zIndex = 0;
         editor.create();
       });
