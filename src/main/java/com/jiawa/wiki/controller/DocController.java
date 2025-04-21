@@ -53,4 +53,14 @@ public class DocController {
         docService.delete(list);
         return resp;
     }
+
+    @GetMapping("/find-content/{id}")
+    public CommonResp findContent(@PathVariable Long id) {
+        // In controller layer do not use the original doc, instead we use DocResp
+        // to control the output to frontend
+        CommonResp<String> resp = new CommonResp<>();
+        String content = docService.findContent(id);
+        resp.setContent(content);
+        return resp;
+    }
 }

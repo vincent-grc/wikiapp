@@ -249,10 +249,26 @@ export default defineComponent({
       }
     };
 
+    /**
+     * Content query
+     **/
+    const handleQueryContent = () => {
+      axios.get("/doc/find-content/" + doc.value.id).then((response) => {
+        const data = response.data;
+        if (data.success) {
+          editor.txt.html(data.content);
+        } else {
+          message.error(data.message);
+        }
+
+      });
+    };
+
     // ---Edit---
     const edit = (record: any) => {
       modalVisible.value = true;
       doc.value = Tool.copy(record);
+      handleQueryContent();
 
       // Prevent selecting the current node or its descendants as parent (would break the tree)
       treeSelectData.value = Tool.copy(level1.value);           // Make a deep copy of the tree
