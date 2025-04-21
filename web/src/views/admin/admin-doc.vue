@@ -24,13 +24,14 @@
                 :data-source="level1"
                 :loading="loading"
                 :pagination="false"
+                size="small"
             >
-              <template #cover="{ text: cover }">
-                <img v-if="cover" :src="cover" alt="avatar" />
+              <template #name="{ text, record }">
+                {{record.sort}}, {{text}}
               </template>
               <template v-slot:action="{ text, record }">
                 <a-space size="small">
-                  <a-button type="primary" @click="edit(record)">
+                  <a-button type="primary" @click="edit(record)" size="small">
                     Edit
                   </a-button>
                   <a-popconfirm
@@ -39,7 +40,7 @@
                       cancel-text="No"
                       @confirm="handleDelete(record.id)"
                   >
-                    <a-button type="dashed">
+                    <a-button type="dashed" size="small">
                       Delete
                     </a-button>
                   </a-popconfirm>
@@ -48,11 +49,20 @@
             </a-table>
           </a-col>
           <a-col :span="16">
-            <a-form :model="doc" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-              <a-form-item label="Name">
-                <a-input v-model:value="doc.name" />
+            <p>
+              <a-form layout="inline" :model="param">
+                <a-form-item>
+                  <a-button type="primary" @click="handleSave()">
+                    Save
+                  </a-button>
+                </a-form-item>
+              </a-form>
+            </p>
+            <a-form :model="doc" layout="vertical">
+              <a-form-item>
+                <a-input v-model:value="doc.name" placeholder="Name"/>
               </a-form-item>
-              <a-form-item label="Parent Doc">
+              <a-form-item>
                 <a-tree-select
                     v-model:value="doc.parent"
                     style="width: 100%"
@@ -64,10 +74,10 @@
                 >
                 </a-tree-select>
               </a-form-item>
-              <a-form-item label="Order">
-                <a-input v-model:value="doc.sort " type="textarea" />
+              <a-form-item>
+                <a-input v-model:value="doc.sort " placeholder="Order" />
               </a-form-item>
-              <a-form-item label="Content">
+              <a-form-item>
                 <div id="content"></div>
               </a-form-item>
             </a-form>
@@ -91,6 +101,7 @@ import { message } from "ant-design-vue";
 import {Tool} from "@/utils/tool";
 import {useRoute} from "vue-router";
 import E from 'wangeditor';
+import { nextTick } from 'vue';
 
 export default defineComponent({
   name: 'AdminDoc',
@@ -102,17 +113,9 @@ export default defineComponent({
     const docs = ref([]);
     const columns = [
       {
-        title: 'name',
-        dataIndex: 'name'
-      },
-      {
-        title: 'Parent Doc',
-        key: 'parent',
-        dataIndex: 'parent'
-      },
-      {
-        title: 'Order',
-        dataIndex: 'sort'
+        title: 'Name',
+        dataIndex: 'name',
+        slots: {customRender: 'name'}
       },
       {
         title: 'Action',
@@ -163,9 +166,8 @@ export default defineComponent({
     const doc = ref({});
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    let editor: any;
 
-    const modalHandleOk = () => {
+    const handleSave = () => {
       modalLoading.value = true;
       axios.post("/doc/save", doc.value ).then((response) => {
         modalLoading.value = false;
@@ -252,14 +254,6 @@ export default defineComponent({
 
       // Add a "None" option at the top
       treeSelectData.value.unshift({id: 0, name: 'None'});
-
-      setTimeout(function () {
-        if (editor) {
-          editor.destroy();
-        }
-        editor = new E('#content');
-        editor.create();
-      }, 100);
     };
 
     // ---Add---
@@ -272,14 +266,6 @@ export default defineComponent({
       treeSelectData.value = Tool.copy(level1.value);
 
       treeSelectData.value.unshift({id: 0, name: 'None'});
-
-      setTimeout(function () {
-        if (editor) {
-          editor.destroy();
-        }
-        editor = new E('#content');
-        editor.create();
-      }, 100);
     };
 
     const handleDelete = (id : number) => {
@@ -297,6 +283,11 @@ export default defineComponent({
 
     onMounted(() => {
       handleQuery( );
+      nextTick(() => {
+        const editor = new E('#content');
+        editor.config.zIndex = 0;
+        editor.create();
+      });
     });
 
     return {
@@ -313,7 +304,7 @@ export default defineComponent({
       doc,
       modalVisible,
       modalLoading,
-      modalHandleOk,
+      handleSave,
 
       treeSelectData,
     }
