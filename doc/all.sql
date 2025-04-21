@@ -91,3 +91,11 @@ insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) val
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, 'Document_2.2.1', 1, 0, 0);
 
 ALTER TABLE doc MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
+
+-- 文档内容
+drop table if exists `content`;
+create table `content` (
+                           `id` bigint not null comment 'doc_id',
+                           `content` mediumtext not null comment 'content',
+                           primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='doc_content';
