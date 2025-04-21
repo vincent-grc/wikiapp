@@ -2,79 +2,84 @@
   <a-layout-content style="padding: 0 50px">
     <a-layout style="padding: 24px 0; background: #fff">
       <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
-        <p>
-          <a-form layout="inline" :model="param">
-            <a-form-item>
-              <a-button type="primary" @click="handleQuery()">
-                Search
-              </a-button>
-            </a-form-item>
-            <a-form-item>
-              <a-button type="primary" @click="add()">
-                Add
-              </a-button>
-            </a-form-item>
-          </a-form>
-        </p>
-        <a-table
-            :columns="columns"
-            :row-key="record => record.id"
-            :data-source="level1"
-            :loading="loading"
-            :pagination="false"
-        >
-          <template #cover="{ text: cover }">
-            <img v-if="cover" :src="cover" alt="avatar" />
-          </template>
-          <template v-slot:action="{ text, record }">
-            <a-space size="small">
-              <a-button type="primary" @click="edit(record)">
-                Edit
-              </a-button>
-              <a-popconfirm
-                  title="Are you sure?"
-                  ok-text="Yes"
-                  cancel-text="No"
-                  @confirm="handleDelete(record.id)"
-              >
-                <a-button type="dashed">
-                  Delete
-                </a-button>
-              </a-popconfirm>
-            </a-space>
-          </template>
-        </a-table>
+        <a-row :gutter="24">
+          <a-col :span="8">
+            <p>
+              <a-form layout="inline" :model="param">
+                <a-form-item>
+                  <a-button type="primary" @click="handleQuery()">
+                    Search
+                  </a-button>
+                </a-form-item>
+                <a-form-item>
+                  <a-button type="primary" @click="add()">
+                    Add
+                  </a-button>
+                </a-form-item>
+              </a-form>
+            </p>
+            <a-table
+                :columns="columns"
+                :row-key="record => record.id"
+                :data-source="level1"
+                :loading="loading"
+                :pagination="false"
+            >
+              <template #cover="{ text: cover }">
+                <img v-if="cover" :src="cover" alt="avatar" />
+              </template>
+              <template v-slot:action="{ text, record }">
+                <a-space size="small">
+                  <a-button type="primary" @click="edit(record)">
+                    Edit
+                  </a-button>
+                  <a-popconfirm
+                      title="Are you sure?"
+                      ok-text="Yes"
+                      cancel-text="No"
+                      @confirm="handleDelete(record.id)"
+                  >
+                    <a-button type="dashed">
+                      Delete
+                    </a-button>
+                  </a-popconfirm>
+                </a-space>
+              </template>
+            </a-table>
+          </a-col>
+          <a-col :span="16">
+            <a-form :model="doc" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+              <a-form-item label="Name">
+                <a-input v-model:value="doc.name" />
+              </a-form-item>
+              <a-form-item label="Parent Doc">
+                <a-tree-select
+                    v-model:value="doc.parent"
+                    style="width: 100%"
+                    :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                    :tree-data="treeSelectData"
+                    placeholder="Select a parent document"
+                    tree-default-expand-all
+                    :fieldNames="{label: 'name', value: 'id'}"
+                >
+                </a-tree-select>
+              </a-form-item>
+              <a-form-item label="Order">
+                <a-input v-model:value="doc.sort " type="textarea" />
+              </a-form-item>
+              <a-form-item label="Content">
+                <div id="content"></div>
+              </a-form-item>
+            </a-form>
+          </a-col>
+        </a-row>
       </a-layout-content>
     </a-layout>
   </a-layout-content>
-  <a-modal v-model:open="modalVisible" title="Doc form"
-           :confirm-loading="modalLoading"
-           @ok="modalHandleOk">
-
-    <a-form :model="doc" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-      <a-form-item label="Name">
-        <a-input v-model:value="doc.name" />
-      </a-form-item>
-      <a-form-item label="Parent Doc">
-        <a-tree-select
-            v-model:value="doc.parent"
-            style="width: 100%"
-            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            :tree-data="treeSelectData"
-            placeholder="Select a parent document"
-            tree-default-expand-all
-            :fieldNames="{label: 'name', value: 'id'}"
-        >
-        </a-tree-select>
-      </a-form-item>
-      <a-form-item label="Order">
-        <a-input v-model:value="doc.sort " type="textarea" />
-      </a-form-item>
-      <a-form-item label="Content">
-        <div id="content"></div>
-      </a-form-item>
-    </a-form>
-  </a-modal>
+<!--  <a-modal v-model:open="modalVisible" title="Doc form"-->
+<!--           :confirm-loading="modalLoading"-->
+<!--           @ok="modalHandleOk">-->
+<!--  </a-modal>-->
 </template>
 
 <script lang="ts">
