@@ -110,3 +110,5 @@ create table `user` (
                         primary key (`id`),
                         unique key `login_name_unique` (`login_name`)
 ) engine=innodb default charset=utf8mb4 comment='User';
+
+insert into `user` (id, `login_name`, `name`, `password`) values (1, 'test', 'testdata', 'e70e2222a9d67c4f2eae107533359aa4');
