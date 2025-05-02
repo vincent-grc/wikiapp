@@ -92,10 +92,21 @@ insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) val
 
 ALTER TABLE doc MODIFY COLUMN id BIGINT NOT NULL AUTO_INCREMENT;
 
--- 文档内容
+-- Document content
 drop table if exists `content`;
 create table `content` (
                            `id` bigint not null comment 'doc_id',
                            `content` mediumtext not null comment 'content',
                            primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='doc_content';
+
+-- User table
+drop table if exists `user`;
+create table `user` (
+                        `id` bigint not null comment 'ID',
+                        `login_name` varchar(50) not null comment 'login_name',
+                        `name` varchar(50) comment 'name',
+                        `password` char(32) not null comment 'password',
+                        primary key (`id`),
+                        unique key `login_name_unique` (`login_name`)
+) engine=innodb default charset=utf8mb4 comment='User';
