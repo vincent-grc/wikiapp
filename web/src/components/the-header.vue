@@ -12,13 +12,13 @@
       <a-menu-item key="2">
         <router-link to="/admin/user">Manage User</router-link>
       </a-menu-item>
-      <a-menu-item key="2">
+      <a-menu-item key="3">
         <router-link to="/admin/ebook">Manage Ebook</router-link>
       </a-menu-item>
-      <a-menu-item key="3">
+      <a-menu-item key="4">
         <router-link to="/admin/category">Manage Category</router-link>
       </a-menu-item>
-      <a-menu-item key="4">
+      <a-menu-item key="5">
         <router-link to="/about">About me</router-link>
       </a-menu-item>
     </a-menu>

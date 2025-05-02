@@ -50,7 +50,7 @@
                   cancel-text="No"
                   @confirm="handleDelete(record.id)"
               >
-                <a-button type="dashed">
+                <a-button type="primary" danger>
                   Delete
                 </a-button>
               </a-popconfirm>

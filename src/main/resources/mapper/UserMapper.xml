@@ -98,7 +98,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jiawa.wiki.domain.User">
+  <insert id="insert" parameterType="com.jiawa.wiki.domain.User" useGeneratedKeys="true" keyProperty="id">
     insert into user (id, login_name, `name`, 
       `password`)
     values (#{id,jdbcType=BIGINT}, #{loginName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
