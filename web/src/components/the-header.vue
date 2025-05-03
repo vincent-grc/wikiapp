@@ -1,36 +1,30 @@
 <template>
   <a-layout-header class="header">
-    <div class="logo" />
+    <div class="logo"> EbookPlatform</div>
     <a-menu
         theme="dark"
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
     >
-      <a-menu-item key="1">
+      <a-menu-item key="/">
         <router-link to="/">Home</router-link>
       </a-menu-item>
-      <a-menu-item key="2">
+      <a-menu-item key="/admin/user" :style="user.id? {} : {display:'none'}">
         <router-link to="/admin/user">Manage User</router-link>
       </a-menu-item>
-      <a-menu-item key="3">
+      <a-menu-item key="/admin/ebook" :style="user.id? {} : {display:'none'}">
         <router-link to="/admin/ebook">Manage Ebook</router-link>
       </a-menu-item>
-      <a-menu-item key="4">
+      <a-menu-item key="/admin/category" :style="user.id? {} : {display:'none'}">
         <router-link to="/admin/category">Manage Category</router-link>
       </a-menu-item>
-      <a-menu-item key="5">
+      <a-menu-item key="/about">
         <router-link to="/about">About me</router-link>
       </a-menu-item>
-      <a-popconfirm
-          title="You sure you want to logout?"
-          ok-text="Yes"
-          cancel-text="No"
-          @confirm="logout()"
-      >
-        <a class="login-menu" v-show="user.id">
+
+      <a class="login-menu" v-show="user.id" @click="logout">
           <span>Logout</span>
-        </a>
-      </a-popconfirm>
+      </a>
       <a class="login-menu" v-show="user.id">
         <span>Welcome：{{user.name}}</span>
       </a>
@@ -140,7 +134,7 @@ export default defineComponent({
   font-size: 18px;
 }
 .login-menu {
-  float: right;
+  float: left;
   color: white;
   padding-left: 10px;
 }
