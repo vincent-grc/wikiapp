@@ -1,7 +1,7 @@
 <template>
   <a-layout-footer style="text-align: center">
     Wiki Ebook ©2025 Created by Vincent Guo
-    User: {{user.name}}
+    <span v-show="user.id"> User: {{user.name}} </span>
   </a-layout-footer>
 </template>
 
