@@ -1,7 +1,7 @@
 <template>
   <a-layout-footer style="text-align: center">
     Wiki Ebook ©2025 Created by Vincent Guo
-    <span v-show="user.id"> User: {{user.name}} </span>
+    <p><span v-show="user.id"> User: {{user.name}} </span></p>
   </a-layout-footer>
 </template>
 
@@ -14,7 +14,7 @@ export default defineComponent({
   setup() {
     const user = computed(() => store.state.user);
 
-    return user;
+    return {user}
   }
 });
 </script>
