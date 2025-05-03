@@ -13,7 +13,6 @@ public class UserSaveReq {
     private String name;
 
     @NotNull(message = "Password can not be null")
-    // @Length(min = 6, max = 20, message = "【密码】6~20位")
     @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,32}$",
             message = "Password should contain numbers and letters, length should be within 6-32")
     private String password;

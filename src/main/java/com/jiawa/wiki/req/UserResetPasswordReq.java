@@ -1,12 +1,12 @@
 package com.jiawa.wiki.req;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
 public class UserResetPasswordReq {
     private Long id;
 
-    @NotNull(message = "Password can not be null")
+    @NotEmpty(message = "Password can not be null")
     @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,32}$",
             message = "Password should contain numbers and letters, length should be within 6-32")
     private String password;

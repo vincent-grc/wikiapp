@@ -1,6 +1,8 @@
 package com.jiawa.wiki.resp;
 
-public class UserLoginResp {
+import java.io.Serializable;
+
+public class UserLoginResp implements Serializable {
     private Long id;
 
     private String loginName;

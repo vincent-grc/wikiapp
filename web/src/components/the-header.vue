@@ -45,7 +45,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import axios from 'axios';
+import { message } from 'ant-design-vue';
+import store from "@/store";
+
+declare let hexMd5: any;
+declare let KEY: any;
 
 export default defineComponent({
   name: 'the-header',
@@ -53,7 +59,7 @@ export default defineComponent({
     // Save after login
     const user = computed(() => store.state.user);
 
-    // Login
+    // Login test
     const loginUser = ref({
       loginName: "test",
       password: "test"
