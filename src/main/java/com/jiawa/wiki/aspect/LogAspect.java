@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 //import com.jiawa.wiki.util.RequestContext;
 //import com.jiawa.wiki.util.SnowFlake;
+import com.jiawa.wiki.utils.RequestContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -55,8 +56,7 @@ public class LogAspect {
         LOG.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
         LOG.info("远程地址: {}", request.getRemoteAddr());
 
-        //RequestContext.setRemoteAddr(getRemoteIp(request));
-
+        RequestContext.setRemoteAddr(getRemoteIp(request));
         // 打印请求参数
         Object[] args = joinPoint.getArgs();
 		// LOG.info("请求参数: {}", JSONObject.toJSONString(args));
