@@ -303,9 +303,13 @@ export default defineComponent({
         ebookId: route.query.ebookId
       };
 
-      treeSelectData.value = Tool.copy(level1.value);
-
-      treeSelectData.value.unshift({id: 0, name: 'None'});
+      // If no docs, still show the "None" option
+      if (Tool.isEmpty(level1.value)) {
+        treeSelectData.value = [{ id: 0, name: 'None' }];
+      } else {
+        treeSelectData.value = Tool.copy(level1.value);
+        treeSelectData.value.unshift({ id: 0, name: 'None' });
+      }
     };
 
     const handleDelete = (id : number) => {

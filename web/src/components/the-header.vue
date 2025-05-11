@@ -68,8 +68,8 @@ export default defineComponent({
 
     // Login test
     const loginUser = ref({
-      loginName: "test",
-      password: "test"
+      loginName: "admin",
+      password: "admin"
     });
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);

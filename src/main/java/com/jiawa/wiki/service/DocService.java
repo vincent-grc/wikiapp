@@ -7,6 +7,7 @@ import com.jiawa.wiki.domain.Doc;
 import com.jiawa.wiki.domain.DocExample;
 import com.jiawa.wiki.mapper.ContentMapper;
 import com.jiawa.wiki.mapper.DocMapper;
+import com.jiawa.wiki.mapper.DocMapperCust;
 import com.jiawa.wiki.req.DocQueryReq;
 import com.jiawa.wiki.req.DocSaveReq;
 import com.jiawa.wiki.resp.DocQueryResp;
@@ -38,6 +39,9 @@ public class DocService {
 
     @Autowired
     private ContentMapper contentMapper;
+
+    @Autowired
+    private DocMapperCust docMapperCust;
 
     public List<DocQueryResp> all(Long ebookId) {
         DocExample example = new DocExample();
@@ -76,6 +80,8 @@ public class DocService {
         Content content = CopyUtil.copy(req, Content.class);
         if (ObjectUtils.isEmpty(req.getId())) {
             // Add a new record
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
 
             content.setId(doc.getId()); // IMPORTANT: set the ID
@@ -103,9 +109,36 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
+        // Increase document view count by 1
+        docMapperCust.increaseViewCount(id);
         if (ObjectUtils.isEmpty(content)) {
             return "";
         }
         return content.getContent();
     }
+
+    /**
+     * Like
+     */
+    public void vote(Long id) {
+         docMapperCust.increaseVoteCount(id);
+        //// 远程IP+doc.id作为key，24小时内不能重复
+        //String ip = RequestContext.getRemoteAddr();
+        //if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 5000)) {
+        //    docMapperCust.increaseVoteCount(id);
+        //} else {
+        //    throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        //}
+        //
+        //// 推送消息
+        //Doc docDb = docMapper.selectByPrimaryKey(id);
+        //String logId = MDC.get("LOG_ID");
+        //wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
+        //// rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
+
+    }
+
+    //public void updateEbookInfo() {
+    //    docMapperCust.updateEbookInfo();
+    //}
 }
