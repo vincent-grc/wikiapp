@@ -18,6 +18,7 @@ import com.jiawa.wiki.utils.CopyUtil;
 import com.jiawa.wiki.utils.RequestContext;
 import com.jiawa.wiki.utils.RedisUtil;
 import com.jiawa.wiki.utils.SnowFlake;
+import com.jiawa.wiki.websocket.WebSocketServer;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -44,6 +45,9 @@ public class DocService {
 
     @Resource
     public RedisUtil redisUtil;
+
+    @Resource
+    public WsService wsService;
 
     @Autowired
     private ContentMapper contentMapper;
@@ -137,11 +141,11 @@ public class DocService {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
 
-        //// 推送消息
-        //Doc docDb = docMapper.selectByPrimaryKey(id);
-        //String logId = MDC.get("LOG_ID");
-        //wsService.sendInfo("【" + docDb.getName() + "】被点赞！", logId);
-        //// rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
+        // 推送消息
+        Doc docDb = docMapper.selectByPrimaryKey(id);
+        String logId = MDC.get("LOG_ID");
+        wsService.sendInfo("【" + docDb.getName() + "】被点赞！");
+        // rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDb.getName() + "】被点赞！");
 
     }
 
