@@ -142,7 +142,7 @@ public class DocService {
 
     }
 
-    //public void updateEbookInfo() {
-    //    docMapperCust.updateEbookInfo();
-    //}
+    public void updateEbookInfo() {
+        docMapperCust.updateEbookInfo();
+    }
 }
