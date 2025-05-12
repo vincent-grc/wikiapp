@@ -2,6 +2,7 @@ package com.jiawa.wiki.service;
 
 import com.jiawa.wiki.websocket.WebSocketServer;
 import jakarta.annotation.Resource;
+import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,8 @@ public class WsService {
     public WebSocketServer webSocketServer;
 
     @Async
-    public void sendInfo(String message) {
+    public void sendInfo(String message, String id) {
+        MDC.put("LOG_ID", id);
         webSocketServer.sendInfo(message);
     }
 }
