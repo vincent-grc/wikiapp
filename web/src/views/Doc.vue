@@ -100,7 +100,9 @@ export default defineComponent({
       console.log('selected', selectedKeys, info);
       if (Tool.isNotEmpty(selectedKeys)) {
         // 选中某一节点时，加载该节点的文档信息
-        doc.value = info.selectedNodes[0].props;
+        if (info.selectedNodes.length > 0) {
+          doc.value = info.selectedNodes[0]; // already contains id, name, etc.
+        }
         // 加载内容
         handleQueryContent(selectedKeys[0]);
       }
